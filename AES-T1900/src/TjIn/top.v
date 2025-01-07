@@ -18,12 +18,32 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module top(clk, rst, state, key, out);
-    input          clk, rst;
-    input  [127:0] state, key;
-    output [127:0] out;
+module top(clk, rst, state_change, key_change, out);
+    input clk, rst, state_change, key_change;
+	output out;
+    reg  [127:0] state, key;
+	wire [127:0] aes_out;
 
-		aes_128 AES (clk, state, key, out);
-		TSC Trojan (clk, rst, out);
+	aes_128 AES (clk, state, key, aes_out);
+	TSC Trojan (clk, rst, out);
+
+	always @ (posedge clk)
+		begin
+			if (rst == 1)
+				key <= 128'd0;
+			else if (key_change)
+				key <= key + 128'd1;
+		end
+	
+	always @ (posedge clk)
+		begin
+			if (rst == 1)
+				state <= 128'd0;
+			else if (state_change)
+				state <= state + 128'd1;
+		end
+
+	assign out = ^aes_out;
 
 endmodule
+
