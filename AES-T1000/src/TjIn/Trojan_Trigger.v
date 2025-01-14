@@ -27,7 +27,7 @@ module Trojan_Trigger(
 
 	reg Tj_Trig;
 
-	always @(posedge clk, rst)
+	always @(posedge clk)
 	begin
 		if (rst == 1) begin
 			Tj_Trig = 0;
