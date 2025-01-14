@@ -20,6 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 module Trojan_Trigger(
     input rst,
+    input clk,
     input [127:0] state,
     output Tj_Trig
     );
